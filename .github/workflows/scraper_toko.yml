@@ -38,4 +38,4 @@ jobs:
           LIMIT: ${{ github.event.inputs.limit }}
           ROW_ID: ${{ github.event.inputs.row_id }}
           N8N_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL }}
-        run: python scraper.py
+        run: python scraping_toko.py
