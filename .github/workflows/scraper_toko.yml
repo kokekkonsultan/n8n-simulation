@@ -28,9 +28,9 @@ jobs:
 
       - name: Install dependencies & Playwright
         run: |
-          pip install playwright httpx
-          playwright install chromium
-          playwright install-deps
+          python -m pip install -r .github/workflows/requirements.txt
+          python -m playwright install chromium
+          python -m playwright install-deps
 
       - name: Jalankan Scraper
         env:
@@ -38,4 +38,4 @@ jobs:
           LIMIT: ${{ github.event.inputs.limit }}
           ROW_ID: ${{ github.event.inputs.row_id }}
           N8N_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL }}
-        run: python scraping_toko.py
+        run: python .github/scraping_toko.py

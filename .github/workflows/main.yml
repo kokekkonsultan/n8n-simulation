@@ -31,15 +31,14 @@ jobs:
 
       - name: 3. Install Library & Playwright
         run: |
-          pip install -r requirements.txt
-          playwright install chromium
-          playwright install-deps chromium
+          python -m pip install -r .github/workflows/requirements.txt
+          python -m playwright install chromium
+          python -m playwright install-deps chromium
 
       - name: 4. Jalankan Script Scraper
         env:
+          KEYWORD: ${{ github.event.inputs.keyword }}
+          LIMIT: ${{ github.event.inputs.limit }}
+          ROW_ID: ${{ github.event.inputs.row_id }}
           N8N_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL }}
-        run: |
-          python scraping.py \
-            --keyword "${{ github.event.inputs.keyword }}" \
-            --limit "${{ github.event.inputs.limit }}" \
-            --row_id "${{ github.event.inputs.row_id }}"
+        run: python .github/scraping_toko.py
