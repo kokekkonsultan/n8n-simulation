@@ -1,0 +1,45 @@
+name: Scrape Leads Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      keyword:
+        description: 'Kata kunci pencarian'
+        required: true
+        type: string
+      limit:
+        description: 'Banyak data yang diambil'
+        required: true
+        type: string
+      row_id:
+        description: 'ID baris antrean (opsional)'
+        required: false
+        default: '0'
+        type: string
+
+jobs:
+  run-scraper:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Ambil Kode dari Repo
+        uses: actions/checkout@v4
+
+      - name: 2. Siapkan Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 3. Install Library & Playwright
+        run: |
+          pip install -r requirements.txt
+          playwright install chromium
+          playwright install-deps chromium
+
+      - name: 4. Jalankan Script Scraper
+        env:
+          N8N_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL }}
+        run: |
+          python scraping.py \
+            --keyword "${{ github.event.inputs.keyword }}" \
+            --limit "${{ github.event.inputs.limit }}" \
+            --row_id "${{ github.event.inputs.row_id }}"
