@@ -1,0 +1,41 @@
+name: Google Maps Scraper
+
+on:
+  workflow_dispatch:
+    inputs:
+      keyword:
+        description: 'Kata kunci pencarian'
+        required: true
+      limit:
+        description: 'Jumlah maksimal toko'
+        required: false
+        default: '20'
+      row_id:
+        description: 'ID baris antrean'
+        required: true
+
+jobs:
+  run-scraper:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies & Playwright
+        run: |
+          pip install playwright httpx
+          playwright install chromium
+          playwright install-deps
+
+      - name: Jalankan Scraper
+        env:
+          KEYWORD: ${{ github.event.inputs.keyword }}
+          LIMIT: ${{ github.event.inputs.limit }}
+          ROW_ID: ${{ github.event.inputs.row_id }}
+          N8N_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL }}
+        run: python scraper.py

@@ -21,3 +21,6 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+/.venv-scraper/
+/scraper-output/
+__pycache__/
